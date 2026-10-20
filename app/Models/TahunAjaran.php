@@ -11,6 +11,15 @@ class TahunAjaran extends Model
 
     protected $fillable = ['nama', 'tanggal_mulai', 'tanggal_selesai', 'is_active'];
 
+    protected static function booted(): void
+    {
+        static::saved(function (TahunAjaran $tahunAjaran) {
+            if ($tahunAjaran->is_active) {
+                static::where('id', '!=', $tahunAjaran->id)->update(['is_active' => false]);
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [

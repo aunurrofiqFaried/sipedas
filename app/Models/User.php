@@ -28,6 +28,14 @@ class User extends Authenticatable implements FilamentUser
         self::ROLE_KEPALA_SEKOLAH,
     ];
 
+    public const ROLE_LABELS = [
+    self::ROLE_ADMIN => 'Admin',
+    self::ROLE_GURU => 'Guru',
+    self::ROLE_GURU_BK => 'Guru BK',
+    self::ROLE_KESISWAAN => 'Waka Kesiswaan',
+    self::ROLE_KEPALA_SEKOLAH => 'Kepala Sekolah',
+    ];
+
     protected $fillable = [
         'name', 'username', 'nip', 'email', 'password', 'role', 'is_active',
     ];
