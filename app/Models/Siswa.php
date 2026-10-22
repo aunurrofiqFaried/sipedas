@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Siswa extends Model
 {
@@ -28,6 +29,12 @@ class Siswa extends Model
     public function absensi(): HasMany
     {
         return $this->hasMany(Absensi::class);
+    }
+
+    public function kelasSiswaAktif(): HasOne
+    {
+        return $this->hasOne(KelasSiswa::class)
+            ->whereHas('tahunAjaran', fn ($q) => $q->where('is_active', true));
     }
 
     public function pelanggaran(): HasMany
