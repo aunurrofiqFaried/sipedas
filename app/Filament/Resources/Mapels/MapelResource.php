@@ -14,9 +14,18 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Concerns\PembatasAkses;
+use App\Models\User;
 
 class MapelResource extends Resource
 {
+    use PembatasAkses;
+
+    protected static function rolePelihat(): array
+    {
+        return [User::ROLE_KESISWAAN, User::ROLE_KEPALA_SEKOLAH];
+    }
+    
     protected static ?string $model = Mapel::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

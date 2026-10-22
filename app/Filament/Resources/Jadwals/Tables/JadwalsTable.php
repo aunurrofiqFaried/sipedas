@@ -11,6 +11,9 @@ use App\Models\Jadwal;
 use App\Models\TahunAjaran;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Imports\JadwalImporter;
+use Filament\Actions\ImportAction;
+use App\Filament\Resources\Jadwals\JadwalResource;
 
 class JadwalsTable
 {
@@ -46,6 +49,12 @@ class JadwalsTable
             SelectFilter::make('hari')->options(Jadwal::HARI),
             SelectFilter::make('kelas_id')->label('Kelas')->relationship('kelas', 'nama')->searchable()->preload(),
             SelectFilter::make('guru_id')->label('Guru')->relationship('guru', 'name')->searchable()->preload(),
+        ])
+        ->headerActions([
+            ImportAction::make()
+                ->label('Import jadwal dari CSV')
+                ->importer(JadwalImporter::class)
+                ->visible(fn (): bool => JadwalResource::canCreate()),
         ])
         ->defaultSort(fn (Builder $query): Builder => $query->orderBy('hari')->orderBy('jam_mulai'))
             ->recordActions([

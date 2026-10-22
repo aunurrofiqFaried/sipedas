@@ -19,6 +19,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Imports\SiswaImporter;
 use Filament\Actions\ImportAction;
+use App\Filament\Resources\Siswas\SiswaResource;
 
 class SiswasTable
 {
@@ -99,18 +100,21 @@ class SiswasTable
         ->headerActions([
             ImportAction::make()
                 ->label('Import dari CSV')
-                ->importer(SiswaImporter::class),
+                ->importer(SiswaImporter::class)
+                ->visible(fn (): bool => SiswaResource::canCreate()),
         ])
         ->defaultSort('nama')
         ->defaultPaginationPageOption(25)
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                ->visible(fn (): bool => SiswaResource::canCreate()),
             ])
         ->toolbarActions([
             BulkActionGroup::make([
                 BulkAction::make('masukkan_kelas')
                     ->label('Masukkan ke kelas')
                     ->icon('heroicon-o-academic-cap')
+                    ->visible(fn (): bool => SiswaResource::canCreate())
                     ->schema([
                         Select::make('kelas_id')
                             ->label('Kelas (tahun ajaran aktif)')

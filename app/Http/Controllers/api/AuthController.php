@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -49,6 +50,36 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Berhasil logout.']);
+    }
+
+    public function ubahPassword(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'password_lama' => ['required', 'string'],
+            'password_baru' => [
+                'required', 'string', 'confirmed', 'different:password_lama',
+                Password::min(8)->letters()->numbers(),
+            ],
+        ]);
+
+        $user = $request->user();
+
+        if (! Hash::check($data['password_lama'], $user->password)) {
+            throw ValidationException::withMessages([
+                'password_lama' => ['Password lama salah.'],
+            ]);
+        }
+
+        // Di-hash otomatis oleh cast 'hashed' di model User
+        $user->password = $data['password_baru'];
+        $user->save();
+
+        // Logout dari semua perangkat lain; perangkat yang sedang dipakai tetap login
+        $user->tokens()
+            ->where('id', '!=', $user->currentAccessToken()->id)
+            ->delete();
+
+        return response()->json(['message' => 'Password berhasil diubah.']);
     }
 
     private function userPayload(User $user): array

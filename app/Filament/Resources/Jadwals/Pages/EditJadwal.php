@@ -6,6 +6,7 @@ use App\Filament\Resources\Jadwals\JadwalResource;
 use App\Services\JadwalBentrokService;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use App\Models\JamPelajaran;
 
 class EditJadwal extends EditRecord
 {
@@ -20,6 +21,8 @@ class EditJadwal extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
+        $data = JamPelajaran::isiWaktu($data);
+
         $service = app(JadwalBentrokService::class);
         $pesan = $service->cek($data, $this->record->id);
 

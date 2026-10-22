@@ -10,6 +10,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use App\Models\User;
 use Filament\Tables\Filters\SelectFilter;
+use App\Filament\Imports\UserImporter;
+use Filament\Actions\ImportAction;
 
 class UsersTable
 {
@@ -41,6 +43,11 @@ class UsersTable
                 SelectFilter::make('role')
                     ->label('Role')
                     ->options(User::ROLE_LABELS),
+            ])
+            ->headerActions([
+                ImportAction::make()
+                    ->label('Import guru dari CSV')
+                    ->importer(UserImporter::class),
             ])
             ->recordActions([
                 EditAction::make(),

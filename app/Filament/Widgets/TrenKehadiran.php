@@ -43,8 +43,8 @@ class TrenKehadiran extends ChartWidget
         for ($i = 0; $i < 14; $i++) {
             $tgl = $mulai->copy()->addDays($i);
 
-            if ($tgl->isSunday()) {
-                continue; // hari Minggu tidak ditampilkan
+            if ($tgl->isWeekend()) {
+                continue; // Sabtu dan Minggu tidak ditampilkan
             }
 
             $row = $rekap->get($tgl->toDateString());

@@ -4,12 +4,12 @@ namespace App\Filament\Resources\Jadwals\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Schema;
 use App\Models\Jadwal;
 use App\Models\TahunAjaran;
 use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\JamPelajaran;
 
 class JadwalForm
 {
@@ -66,28 +66,17 @@ class JadwalForm
                 ->options(Jadwal::HARI)
                 ->required(),
 
-            TextInput::make('jam_ke_mulai')
-                ->label('Jam ke- (mulai)')
-                ->numeric()->minValue(1)->maxValue(15)
+            Select::make('jam_ke_mulai')
+                ->label('Mulai jam ke-')
+                ->options(fn () => JamPelajaran::opsi())
                 ->required()
                 ->helperText('Jam ke-1 atau ke-2 menentukan guru boleh mengabsen kelas lewat aplikasi.'),
 
-            TextInput::make('jam_ke_selesai')
-                ->label('Jam ke- (selesai)')
-                ->numeric()->minValue(1)->maxValue(15)
+            Select::make('jam_ke_selesai')
+                ->label('Sampai jam ke-')
+                ->options(fn () => JamPelajaran::opsi())
                 ->required()
-                ->gte('jam_ke_mulai'),
-
-            TimePicker::make('jam_mulai')
-                ->label('Waktu mulai')
-                ->seconds(false)
-                ->required(),
-
-            TimePicker::make('jam_selesai')
-                ->label('Waktu selesai')
-                ->seconds(false)
-                ->required()
-                ->after('jam_mulai'),
+                ->rules(['integer', 'gte:jam_ke_mulai']),
         ]);
     }
 }

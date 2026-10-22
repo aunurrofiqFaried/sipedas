@@ -14,9 +14,18 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Concerns\PembatasAkses;
+use App\Models\User;
 
 class SiswaResource extends Resource
 {
+    use PembatasAkses;
+
+    protected static function rolePelihat(): array
+    {
+        return [User::ROLE_KESISWAAN, User::ROLE_KEPALA_SEKOLAH, User::ROLE_GURU_BK];
+    }
+    
     protected static ?string $model = Siswa::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

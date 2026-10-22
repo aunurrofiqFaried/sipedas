@@ -15,6 +15,8 @@ Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/ubah-password', [AuthController::class, 'ubahPassword'])
+    ->middleware('throttle:5,1');
 
     // Fitur harian guru (admin selalu lolos di middleware role)
     Route::middleware('role:guru,guru_bk,kesiswaan')->group(function () {

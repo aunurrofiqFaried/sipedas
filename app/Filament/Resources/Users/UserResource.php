@@ -24,6 +24,13 @@ class UserResource extends Resource
     protected static ?string $pluralModelLabel = 'Guru & Staf';
     protected static ?string $navigationLabel = 'Guru & Staf';
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+
+        return $user instanceof User && $user->role === User::ROLE_ADMIN;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);
